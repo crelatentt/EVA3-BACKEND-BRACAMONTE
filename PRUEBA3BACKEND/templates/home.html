@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>TIENDA</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+
+        <!-- Bootstrap CSS v5.2.1 -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
+    </head>
+
+    <body class="container mt-2">
+        <div class="alert alert-info text-center display-2" role="alert">TIENDA ONLINE</div>
+
+        <form method="GET" class="mb-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="q" placeholder="Buscar producto..." value="{{ buscar }}">
+                <button class="btn btn-primary" type="submit">Buscar producto</button>
+            </div>
+        </form>
+
+        <form method="GET" class="mb-3">
+            <div class="input-group">
+                <select name="categoria" class="form-select">
+                    <option value="">Todas las categorías</option>
+                    {% for c in categorias %}
+                        <option 
+                            value="{{ c.id }}" 
+                            {% if categoria_sel == c.id|stringformat:"s" %}selected{% endif %}
+                        >
+                            {{ c.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-secondary" type="submit">Filtrar</button>
+            </div>
+        </form>
+
+        <div class="row">
+            {% for p in productos %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        {% if p.foto_1 %}
+                        <img class="card-img-top w-100" style="width:100px;" src="{{ p.foto_1.url }}"/>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ p.nombre }}</h5>
+                            <p class="card-text">Precio: ${{ p.precio_base }}</p>
+                            <a href="{% url 'detalle_producto' p.id %}" class="btn btn-success">Ver detalle producto</a>
+                        </div>
+                        {% if p.producto_destacado %}
+                        <div class="card-footer display-3 my-3 text-bg-warning">PRODUCTO DESTACADO</div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </body>
+</html>
+        
