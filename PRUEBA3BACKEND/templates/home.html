@@ -21,29 +21,47 @@
     <body class="container mt-2">
         <div class="alert alert-info text-center display-2" role="alert">TIENDA ONLINE</div>
 
-        <form method="GET" class="mb-3">
-            <div class="input-group">
-                <input type="text" class="form-control" name="q" placeholder="Buscar producto" value="">
-                <button class="btn btn-primary" type="submit">Buscar producto</button>
-            </div>
-        </form>
+        <div class="row mb-4 align-items-center">
 
-        <form method="GET" class="mb-3">
-            <div class="input-group">
-                <select name="categoria" class="form-select">
-                    <option value="">Todas las categorías</option>
-                    {% for c in categorias %}
-                        <option 
-                            value="{{ c.id }}" 
-                            {% if categoria_sel == c.id|stringformat:"s" %}selected{% endif %}
-                        >
-                            {{ c.nombre }}
-                        </option>
-                    {% endfor %}
-                </select>
-                <button class="btn btn-secondary" type="submit">Filtrar</button>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <form method="GET">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="q" placeholder="Buscar producto" value="">
+                        <button class="btn btn-primary" type="submit">BUSCAR</button>
+                    </div>
+                </form>
             </div>
-        </form>
+
+            <div class="col-md-4 mb-3 mb-md-0">
+                <form method="GET">
+                    <div class="input-group">
+                        <select name="categoria" class="form-select">
+                            <option value="">TODAS LAS CATEGORÍAS</option>
+                            {% for c in categorias %}
+                                <option value="{{ c.id }}" {% if categoria_sel == c.id|stringformat:"s" %}selected{% endif %}>{{ c.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-secondary" type="submit">FILTRAR</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card p-2">
+                {% if error_seguimiento %}
+                    <div class="alert alert-danger mb-2" role="alert" style="font-size: 0.9rem;">
+                        {{ error_seguimiento }}
+                    </div>
+                {% endif %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="token_seguimiento" placeholder="Ingresa aquí tu Token" required>
+                        <button type="submit" class="btn btn-success">BUSCAR PEDIDO</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <div class="row">
             {% for p in productos %}
@@ -54,8 +72,8 @@
                         {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ p.nombre }}</h5>
-                            <p class="card-text">Precio: ${{ p.precio_base }}</p>
-                            <a href="{% url 'detalle_producto' p.id %}" class="btn btn-success">Ver detalle producto</a>
+                            <p class="card-text">PRECIO: ${{ p.precio_base }}</p>
+                            <a href="{% url 'detalle_producto' p.id %}" class="btn btn-success">VER DETALLE PRODUCTO</a>
                         </div>
                         {% if p.producto_destacado %}
                         <div class="card-footer text-bg-warning">PRODUCTO DESTACADO!!</div>

@@ -21,24 +21,32 @@
     <body class="container mt-2">
         <div class="alert alert-info text-center display-2" role="alert">SEGUIMIENTO DE PEDIDO</div>
 
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Estado del pedido</h5>
-                <p class="card-text"><strong>Cliente:</strong> {{ pedido.cliente_nombre }}</p>
-                <p class="card-text"><strong>Contacto:</strong> {{ pedido.cliente_contacto }}</p>
-                {% if pedido.producto %}
-                    <p class="card-text"><strong>Producto de referencia:</strong> {{ pedido.producto.nombre }}</p>
-                {% else %}
-                    <p class="card-text"><strong>Producto de referencia:</strong> NINGUNO</p>
-                {% endif %}
-                <p class="card-text"><strong>Descripción:</strong> {{ pedido.descripcion }}</p>
-                <p class="card-text"><strong>Estado del pedido:</strong> {{ pedido.estado_pedido }}</p>
-                <p class="card-text"><strong>Estado del pago:</strong> {{ pedido.estado_pago }}</p>
-                {% if pedido.fecha_necesita %}
-                    <p class="card-text"><strong>Fecha necesaria:</strong> {{ pedido.fecha_necesita }}</p>
-                {% endif %}
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Estado del pedido</h5>
+                    <p class="card-text"><strong>Cliente:</strong> {{ pedido.cliente_nombre }}</p>
+                    <p class="card-text"><strong>Contacto:</strong> {{ pedido.cliente_contacto }}</p>
+                    {% if pedido.producto %}
+                        <p class="card-text"><strong>Producto de referencia:</strong> {{ pedido.producto.nombre }}</p>
+                    {% else %}
+                        <p class="card-text"><strong>Producto de referencia:</strong> NINGUNO</p>
+                    {% endif %}
+                    <p class="card-text"><strong>Descripción:</strong> {{ pedido.descripcion }}</p>
+                    <p class="card-text"><strong>Estado del pedido:</strong> {{ pedido.estado_pedido }}</p>
+                    <p class="card-text"><strong>Estado del pago:</strong> {{ pedido.estado_pago }}</p>
+                    {% if pedido.fecha_necesita %}
+                        <p class="card-text"><strong>Fecha necesaria:</strong> {{ pedido.fecha_necesita }}</p>
+                    {% endif %}
+                    <p class="card-text"><strong>FOTO DE REFERENCIA</strong></p>
+                    {% for img in imagenes %}
+                        <div class="mb-2">
+                            <img style="width: 250px;" src="{{ img.imagen.url }}" class="img-fluid">
+                        </div>
+                    {% empty %}
+                        <p class="card-text">No hay imágenes asociadas a este pedido.</p>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
 
         <btn><a href="{% url 'home' %}" class="btn btn-primary mt-3">VOLVER A LA TIENDA</a></btn>
     </body>
