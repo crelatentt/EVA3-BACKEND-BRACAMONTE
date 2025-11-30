@@ -61,7 +61,7 @@ class Pedido(models.Model):
 
     token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     cliente_nombre = models.CharField(max_length=150)
-    cliente_contacto = models.CharField(max_length=150)  #email, teléfono o red social del cliente xd
+    cliente_contacto = models.CharField(max_length=150)  #coso para contactar al cliente xd osea email tlf etc
     producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True, blank=True)
     descripcion = models.TextField()
     estado_pedido = models.CharField(max_length=20, choices= estados_pedido, default="SOLICITADO")
@@ -75,3 +75,8 @@ class Pedido(models.Model):
 
     def obtener_token(self):
         return f"/seguimiento/{self.token}/"
+    
+class ImagenPedido(models.Model):
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to='media/')
+

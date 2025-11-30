@@ -23,7 +23,7 @@
 
         <form method="GET" class="mb-3">
             <div class="input-group">
-                <input type="text" class="form-control" name="q" placeholder="Buscar producto..." value="{{ buscar }}">
+                <input type="text" class="form-control" name="q" placeholder="Buscar producto" value="">
                 <button class="btn btn-primary" type="submit">Buscar producto</button>
             </div>
         </form>
@@ -58,7 +58,7 @@
                             <a href="{% url 'detalle_producto' p.id %}" class="btn btn-success">Ver detalle producto</a>
                         </div>
                         {% if p.producto_destacado %}
-                        <div class="card-footer display-3 my-3 text-bg-warning">PRODUCTO DESTACADO</div>
+                        <div class="card-footer text-bg-warning">PRODUCTO DESTACADO!!</div>
                         {% endif %}
                     </div>
                 </div>

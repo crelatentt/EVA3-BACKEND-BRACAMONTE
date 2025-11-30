@@ -36,12 +36,12 @@
 
             <div class="card-body text-center">
                 <h5 class="card-title">{{ producto.nombre }}</h5>
-                <p class="card-text">Precio: ${{ producto.precio_base }}</p>
-                <p class="card-text">Descripción del producto: {{ producto.descripcion }}</p>
+                <p class="card-text">PRECIO: ${{ producto.precio_base }}</p>
+                <p class="card-text">DESCRIPCION: {{ producto.descripcion }}</p>
             </div>
 
             <div class="card-body text-center">
-                <a href="#" class="btn btn-success">Solicitar este producto</a>
+                <a href="{% url 'formulario_pedido' %}?producto={{ p.id }}" class="btn btn-success">SOLICITAR ESTE PRODUCTO</a>
             </div>
         </div>
 
