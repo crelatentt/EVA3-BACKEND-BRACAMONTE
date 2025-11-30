@@ -7,11 +7,13 @@ from django.utils.html import format_html
 class CategoriaAdmin(admin.ModelAdmin):
     list_display = ("nombre", "descripcion")
     search_fields = ["nombre"]
+    list_filter = ["nombre"]
 
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
     list_display = ("nombre", "categoria", "precio_base", "producto_destacado", "mostrar_imagen1", "mostrar_imagen2", "mostrar_imagen3")
     list_filter = ("categoria", "producto_destacado")
+    search_fields = ("nombre", "descripcion")
 
     def mostrar_imagen1(self,obj):
         if obj.foto_1:
@@ -32,6 +34,7 @@ class ProductoAdmin(admin.ModelAdmin):
 class InsumoAdmin(admin.ModelAdmin):
     list_display = ("nombre", "tipo", "cantidad_dispo", "unidad", "marca", "color")
     search_fields = ("nombre", "tipo", "marca")
+    list_filter = ("tipo", "marca", "color")
 
 @admin.register(Pedido)
 class PedidoAdmin(admin.ModelAdmin):
