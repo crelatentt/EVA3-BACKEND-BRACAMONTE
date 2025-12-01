@@ -23,40 +23,8 @@
 
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="mb-3">
-                <label for="cliente_nombre" class="form-label">NOMBRE</label>
-                <input type="text" class="form-control" id="cliente_nombre" name="cliente_nombre" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="cliente_contacto" class="form-label">CONTACTO (EMAIL, TLF, RED SOCIAL)</label>
-                <input type="text" class="form-control" id="cliente_contacto" name="cliente_contacto" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="producto" class="form-label">PRODUCTO DE REFERENCIA(OPCIONAL)</label>
-                <select class="form-select" id="producto" name="producto">
-                    <option value="" selected>NINGUNO</option>
-                    {% for producto in productos %}
-                        <option value="{{ producto.id }}">{{ producto.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="descripcion" class="form-label">DESCRIPCION DEL PEDIDO</label>
-                <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
-            </div>
-
-            <div class="mb-3">
-                <label for="imagen" class="form-label">IMAGENES (OPCIONAL)</label>
-                <input type="file" class="form-control" id="imagen" name="imagen" multiple>
-            </div>
-
-            <div class="mb-3">
-                <label for="fecha_necesita" class="form-label">FECHA EN LA QUE NECESITAS TU PRODUCTO (OPCIONAL)</label>
-                <input type="date" class="form-control" id="fecha_necesita" name="fecha_necesita">
-            </div>
+            {{ form.as_p }}
+            {{ imagen_form.as_div }}
 
             <button type="submit" class="btn btn-primary">ENVIAR PEDIDO</button>
             <btn><a href="{% url 'home' %}" class="btn btn-secondary my-3">CANCELAR PEDIDO</a></btn>

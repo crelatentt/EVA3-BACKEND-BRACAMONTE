@@ -14,7 +14,6 @@ def home(request):
             error_mensaje = "Token no encontrado. Por favor, verifique e intente nuevamente."
         except ValidationError:
             error_mensaje = "Token inválido. Por favor, verifique e intente nuevamente."
-
         
     productos = Producto.objects.all()
     categorias = Categoria.objects.all()
@@ -43,51 +42,32 @@ def detalle_producto(request, producto_id):
     return render(request, 'detalle_producto.html', data)
 
 def formulario_pedido(request):
-    producto_id = request.GET.get('producto')
-    producto = None
-
-    if producto_id:
-        try:
-            producto = Producto.objects.get(id=producto_id)
-        except Producto.DoesNotExist:
-            producto = None
+    form = PedidoForm()
+    imagen_form = ImagenPedidoForm()
 
     if request.method == 'POST':
-        nombre = request.POST.get('cliente_nombre')
-        contacto = request.POST.get('cliente_contacto')
-        producto_id = request.POST.get('producto')
-        descripcion = request.POST.get('descripcion')
-        fecha_necesita = request.POST.get('fecha_necesita') or None
-
-        pedido = Pedido.objects.create(
-            cliente_nombre=nombre,
-            cliente_contacto=contacto,
-            producto_id=producto_id,
-            descripcion=descripcion,
-            plataforma_origen="WEB",
-            estado_pago="PENDIENTE",
-            fecha_necesita=fecha_necesita,
-            estado_pedido = "SOLICITADO",
-        )
-
-        imagen = request.FILES.get('imagen')
-        if imagen:
-            ImagenPedido.objects.create(
-                pedido=pedido,
-                imagen=imagen
-            )
-
-        data = {
-            "pedido": pedido,
-            "token": pedido.obtener_token(),
-            "url_seguimiento": pedido.obtener_token()
-        }
-
-        return render(request, 'pedido_confirmacion.html', data)
-
+        form = PedidoForm(request.POST)
+        imagen_form = ImagenPedidoForm(request.POST, request.FILES)
+        if form.is_valid():
+            pedido = form.save()
+            pedido.plataforma_origen = "WEB"
+            pedido.estado_pago = "PENDIENTE"
+            pedido.estado_pedido = "SOLICITADO"
+            pedido.save()
+            if request.FILES.get('imagen'):
+                ImagenPedido.objects.create(
+                    pedido=pedido,
+                    imagen=request.FILES.get('imagen')
+                )
+            data = {
+                'pedido': pedido,
+                'token': pedido.obtener_token(),
+                'url_seguimiento': pedido.obtener_token(),
+            }
+            return render(request, 'pedido_confirmacion.html', data)
     data = {
-        'producto_select': producto,
-        'productos': Producto.objects.all()
+        'form': form,
+        'imagen_form': imagen_form,
     }
     return render(request, 'formulario_pedido.html', data)
 
@@ -96,7 +76,6 @@ def pedido_confirmacion(request, token):
     data = {
         'pedido': pedido,
     }
-
     return render(request, 'pedido_confirmacion.html', data)
 
 def seguimiento(request, token):
@@ -111,7 +90,6 @@ def seguimiento(request, token):
         'pedido': pedido,
         'imagenes': imagenes
     }
-
     return render(request, 'seguimiento.html', data)
 
         
