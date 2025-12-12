@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from mainApp.models import Producto, Categoria, Pedido, ImagenPedido
 from .forms import PedidoForm, ImagenPedidoForm
 from django.core.exceptions import ValidationError
+from django.db import models
+import datetime
+from django.db.models import Count
 
 def home(request):
     error_mensaje = None
@@ -91,5 +94,31 @@ def seguimiento(request, token):
         'imagenes': imagenes
     }
     return render(request, 'seguimiento.html', data)
+
+def reporte_sistema(request):
+    pedidos_filtrados = Pedido.objects.all()
+    estado_seleccionado = request.GET.get('estado')
+    lista_estados_choices = Pedido.estados_pedido
+    plataforma_seleccionada = request.GET.get('plataforma')
+    
+    if estado_seleccionado and estado_seleccionado != 'TODOS':
+        pedidos_filtrados = pedidos_filtrados.filter(estado_pedido=estado_seleccionado)
+    
+    reporte_por_estado = pedidos_filtrados.values('estado_pedido').annotate(cantidad=Count('id')).order_by('-cantidad')
+
+    reporte_por_plataforma = pedidos_filtrados.values('plataforma_origen').annotate(cantidad=Count('id')).order_by('-cantidad')
+
+    reporte_productos_solicitados = pedidos_filtrados.filter(producto__isnull=False).values('producto__nombre' ).annotate(cantidad=Count('producto')).order_by('-cantidad')[:10] 
+    
+    data = {
+        'reporte_por_estado': reporte_por_estado,
+        'reporte_por_plataforma': reporte_por_plataforma,
+        'reporte_productos_solicitados': reporte_productos_solicitados,
+        'estado_seleccionado': estado_seleccionado,
+        'estados': lista_estados_choices,
+        'plataforma_seleccionada' : plataforma_seleccionada,
+    }
+
+    return render(request, 'reporte_sistema.html', data)
 
         

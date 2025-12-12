@@ -11,6 +11,7 @@ urlpatterns = [
     path('solicitar/', views.formulario_pedido, name='formulario_pedido'),
     path('solicitud/<uuid:token>/', views.pedido_confirmacion, name='pedido_confirmacion'),
     path('seguimiento/<uuid:token>/', views.seguimiento, name='seguimiento'),
+    path('reporte_sistema/', views.reporte_sistema, name='reporte_sistema'),
 ]
 
 if settings.DEBUG:
