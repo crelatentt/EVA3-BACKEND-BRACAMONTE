@@ -1,10 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from mainApp.models import Producto, Categoria, Pedido, ImagenPedido
+from mainApp.models import Producto, Categoria, Pedido, ImagenPedido, Insumo
 from .forms import PedidoForm, ImagenPedidoForm
 from django.core.exceptions import ValidationError
-from django.db import models
-import datetime
 from django.db.models import Count
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view
+from .serializers import InsumoSerializer, PedidoSerializer
+from rest_framework.response import Response
+from rest_framework import status, mixins, generics
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import PedidoFilter
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 def home(request):
     error_mensaje = None
@@ -95,6 +102,11 @@ def seguimiento(request, token):
     }
     return render(request, 'seguimiento.html', data)
 
+def cerrar_sesion(request):
+    logout(request)
+    return redirect('home')
+
+@login_required
 def reporte_sistema(request):
     pedidos_filtrados = Pedido.objects.all()
     estado_seleccionado = request.GET.get('estado')
@@ -121,4 +133,68 @@ def reporte_sistema(request):
 
     return render(request, 'reporte_sistema.html', data)
 
+class lista_insumos(mixins.ListModelMixin,mixins.CreateModelMixin,generics.GenericAPIView):
+    queryset = Insumo.objects.all()
+    serializer_class = InsumoSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+class detalle_insumos(mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.DestroyModelMixin,generics.GenericAPIView):
+    queryset = Insumo.objects.all()
+    serializer_class = InsumoSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+    
+class lista_pedidos(mixins.CreateModelMixin,generics.GenericAPIView):
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+class detalle_pedido(mixins.UpdateModelMixin,generics.GenericAPIView):
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
+
+    def get(self, request, *args, **kwargs):
+        pedido = self.get_object()
+        serializer = self.get_serializer(pedido)
+        return Response(serializer.data)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+    
+class filtro_pedidos(generics.ListAPIView):
+    serializer_class = PedidoSerializer
+    queryset = Pedido.objects.all().order_by('-fecha_creacion')
+    filter_backends = [DjangoFilterBackend] 
+    filterset_class = PedidoFilter
+
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
+        limite_resultados_str = self.request.query_params.get('limite')
         
+        if limite_resultados_str:
+            try:
+                limite = int(limite_resultados_str)
+                queryset = queryset[:limite] 
+            except ValueError:
+                pass
+                
+        return queryset
+
+

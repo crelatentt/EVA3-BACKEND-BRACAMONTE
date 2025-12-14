@@ -32,14 +32,15 @@
                 <button class="btn btn-secondary" type="submit">FILTRAR</button>
             </div>
 
+
         <div class="row my-4">
             <div class="col-md-6">
-                <h3 class="text-center">Pedidos por estado</h3>
+                <h3 class="text-center">PEDIDOS POR ESTADO</h3>
                 <table class="table table-striped">
                     </thead>
                         <tr>
-                            <th>Estado Pedido</th>
-                            <th>Cantidad de Pedidos</th>
+                            <th>ESTADO PEDIDO</th>
+                            <th>CANTIDAD DE PEDIDOS</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,12 +56,12 @@
         
         <div class="row my-4">
             <div class="col-md-6">
-                <h3 class="text-center">Pedidos por Plataforma</h3>
+                <h3 class="text-center">PEDIDOS POR PLATAFORMA</h3>
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Plataforma</th>
-                            <th>Cantidad de Pedidos</th>
+                            <th>PLATAFORMA</th>
+                            <th>CANTIDAD DE PEDIDOS</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,12 +76,12 @@
             </div>
 
             <div class="col-md-6">
-                <h3 class="text-center">Productos Más Solicitados</h3>
+                <h3 class="text-center">PRODUCTOS MAS SOLICITADOS</h3>
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Producto</th>
-                            <th>Cantidad Solicitada</th>
+                            <th>PRODUCTO</th>
+                            <th>CANTIDAD SOLICITADA</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,5 +95,10 @@
                 </table>
             </div>
        
+        </div>
+        <div class="text-center mb-4">
+            <a href="{% url 'home' %}" class="btn btn-primary">VOLVER A LA TIENDA</a>
+            <a href="{% url 'cerrar_sesion' %}" class="btn btn-danger">CERRAR SESIÓN</a>
+        </div>
     </body>
 </html>
