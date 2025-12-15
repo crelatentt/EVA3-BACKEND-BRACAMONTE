@@ -65,10 +65,10 @@
 
         <div class="row">
             {% for p in productos %}
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4 mb-3 my-4">
                     <div class="card">
                         {% if p.foto_1 %}
-                        <img class="card-img-top w-100" style="width:100px;" src="{{ p.foto_1.url }}"/>
+                        <img class="card-img-top w-100" style="height: 400px; width: 100px;" src="{{ p.foto_1.url }}"/>
                         {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ p.nombre }}</h5>
