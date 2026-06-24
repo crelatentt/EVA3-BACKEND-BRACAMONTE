@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_filters',
     'rest_framework',
-    'mainApp'
+    'mainApp',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -143,3 +147,30 @@ LOGIN_REDIRECT_URL = '/reporte_sistema/'
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
+
+# --- Configuración de Azure Blob Storage ---
+
+# 1. Credenciales desde variables de entorno
+AZURE_ACCOUNT_NAME = os.getenv('AZURE_ACCOUNT_NAME')
+AZURE_ACCOUNT_KEY  = os.getenv('AZURE_ACCOUNT_KEY')
+AZURE_CONTAINER    = os.getenv('AZURE_CONTAINER')
+
+# 2. Mapeo de almacenamiento (Django 4.2+)
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "account_name": AZURE_ACCOUNT_NAME,
+            "account_key": AZURE_ACCOUNT_KEY,
+            "azure_container": AZURE_CONTAINER,
+            "expiration_secs": 3600,            # URLs SAS válidas por 1 hora
+            "overwrite_files": True,            # Sobrescribe archivos con el mismo nombre
+            "cache_control": "max-age=86400",   # Caché de 24 h en navegador
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+# --- Fin configuración Azure Blob Storage ---

@@ -15,9 +15,9 @@ class Producto(models.Model):
     descripcion = models.TextField()
     producto_destacado = models.BooleanField(default=False)
     precio_base = models.PositiveIntegerField()
-    foto_1 = models.ImageField(upload_to='media/', blank=True)
-    foto_2 = models.ImageField(upload_to='media/', blank=True)
-    foto_3 = models.ImageField(upload_to='media/', blank=True)
+    foto_1 = models.ImageField(upload_to='', blank=True)
+    foto_2 = models.ImageField(upload_to='', blank=True)
+    foto_3 = models.ImageField(upload_to='', blank=True)
 
     def __str__(self):
         return self.nombre
@@ -78,5 +78,5 @@ class Pedido(models.Model):
     
 class ImagenPedido(models.Model):
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
-    imagen = models.ImageField(upload_to='media/')
+    imagen = models.ImageField(upload_to='')
 

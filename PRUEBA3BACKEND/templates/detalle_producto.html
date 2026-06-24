@@ -41,11 +41,10 @@
             </div>
 
             <div class="card-body text-center">
-                <a href="{% url 'formulario_pedido' %}?producto={{ p.id }}" class="btn btn-success">SOLICITAR ESTE PRODUCTO</a>
+                <a href="{% url 'formulario_pedido' %}?producto={{ producto.id }}" class="btn btn-success">SOLICITAR ESTE PRODUCTO</a>
             </div>
         </div>
 
         <a href="{% url 'home' %}" class="btn btn-primary mb-3">Volver a la tienda</a>
     </body>
 </html>
-        
